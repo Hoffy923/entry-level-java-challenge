@@ -1,54 +1,118 @@
-# ReliaQuest's Entry-Level Java Challenge
+# Entry-Level Java Challenge
 
-Please keep the following in mind while working on this challenge:
-* Code implementations will not be graded for **correctness** but rather on practicality
-* Articulate clear and concise design methodologies, if necessary
-* Use clean coding etiquette
-  * E.g. avoid liberal use of new-lines, odd variable and method names, random indentation, etc...
-* Test cases are not required
+A simple Spring Boot REST API for managing employees.  
+This project demonstrates a basic CRUD service (`Create`, `Read`, `Update`, `Delete`) using an in-memory list as the data store.  
+It’s designed as an entry-level challenge to practice Java, Spring Boot, Gradle, and RESTful APIs.
 
-## Problem Statement
+---
 
-Your employer has recently purchased a license to top-tier SaaS platform, Employees-R-US, to off-load all employee management responsibilities.
-Unfortunately, your company's product has an existing employee management solution that is tightly coupled to other services and therefore 
-cannot be replaced whole-cloth. Product and Development leads in your department have decided it would be best to interface
-the existing employee management solution with the commercial offering from Employees-R-US for the time being until all employees can be
-migrated to the new SaaS platform.
+## Requirements
+- **JDK 17**
+- **Gradle Wrapper** (included in the project, use `./gradlew`)
 
-Your ask is to expose employee information as a protected, secure REST API for consumption by Employees-R-US web hooks.
-The initial REST API will consist of 3 endpoints, listed in the following section. If for any reason the implementation 
-of an endpoint is problematic, the team lead will accept **pseudo-code** and a pertinent description (e.g. java-doc) of intent.
+---
 
-Good luck!
+## Build & Run
 
-## Endpoints to implement (API module)
+Clone the repository:
 
-_See `com.challenge.api.controller.EmployeeController` for details._
+```bash
+git clone https://github.com/Hoffy923/entry-level-java-challenge.git
+cd entry-level-java-challenge/api
+```
 
-getAllEmployees()
+Build and run the application:
 
-    output - list of employees
-    description - this should return all employees, unfiltered
+```bash
+# Clean and build
+./gradlew clean build
 
-getEmployeeByUuid(...)
+# Run the Spring Boot app
+./gradlew bootRun
+```
 
-    path variable - employee UUID
-    output - employee
-    description - this should return a single employee based on the provided employee UUID
+The application will start on **http://localhost:8080** by default.
 
-createEmployee(...)
+---
 
-    request body - attributes necessary to create an employee
-    output - employee
-    description - this should return a single employee, if created, otherwise error
+## Endpoints
 
-## Code Formatting
+### Get all employees
+```bash
+curl -i http://localhost:8080/employees
+```
 
-This project utilizes Gradle plugin [Diffplug Spotless](https://github.com/diffplug/spotless/tree/main/plugin-gradle) to enforce format
-and style guidelines with every build.
+### Create a new employee
+```bash
+curl -i -X POST http://localhost:8080/employees \
+  -H "Content-Type: application/json" \
+  -d '{"id":1,"name":"Jett Hoffmeier","role":"Engineer"}'
+```
 
-To format code according to style guidelines, you can run **spotlessApply** task.
-`./gradlew spotlessApply`
+### Get employee by ID
+```bash
+curl -i http://localhost:8080/employees/1
+```
 
-The spotless plugin will also execute check-and-validation tasks as part of the gradle **build** task.
-`./gradlew build`
+### Update employee by ID
+```bash
+curl -i -X PUT http://localhost:8080/employees/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Jett H.","role":"Senior Engineer"}'
+```
+
+### Delete employee by ID
+```bash
+curl -i -X DELETE http://localhost:8080/employees/1
+```
+
+---
+
+## Example Session
+
+```bash
+# Start with empty list
+curl -i http://localhost:8080/employees
+
+# Add a new employee
+curl -i -X POST http://localhost:8080/employees \
+  -H "Content-Type: application/json" \
+  -d '{"id":1,"name":"Jett Hoffmeier","role":"Engineer"}'
+
+# Fetch by ID
+curl -i http://localhost:8080/employees/1
+
+# Update the employee
+curl -i -X PUT http://localhost:8080/employees/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Jett H.","role":"Senior Engineer"}'
+
+# Delete the employee
+curl -i -X DELETE http://localhost:8080/employees/1
+
+# Confirm deletion
+curl -i http://localhost:8080/employees
+```
+
+---
+
+## Testing (Optional)
+
+Unit and integration tests are **not required** for this challenge.  
+If you decide to add them, please use **JUnit 5** and follow standard conventions.
+
+Resources:
+- [Spring Web Test tutorial](https://spring.io/guides/gs/testing-web)  
+- [JUnit 5 guide](https://www.baeldung.com/junit-5)  
+
+---
+
+## Notes
+
+- Data is stored in an in-memory list and will reset each time the application restarts.  
+- This project focuses on demonstrating basic REST API structure, not persistence or database usage.  
+
+---
+
+## License
+This project is for educational purposes as part of an entry-level Java coding challenge.  
