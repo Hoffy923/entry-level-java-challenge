@@ -35,3 +35,11 @@ out/
 ### VS Code ###
 .vscode/
 oracleJdk-25.jdk/
+
+# build artifacts
+build/
+.gradle/
+# macOS
+.DS_Store
+# logs
+*.log
