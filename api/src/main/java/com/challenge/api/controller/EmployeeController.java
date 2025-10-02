@@ -1,43 +1,61 @@
 package com.challenge.api.controller;
 
 import com.challenge.api.model.Employee;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * Fill in the missing aspects of this Spring Web REST Controller. Don't forget to add a Service layer.
- */
 @RestController
-@RequestMapping("/api/v1/employee")
+@RequestMapping("/employees")
 public class EmployeeController {
 
-    /**
-     * @implNote Need not be concerned with an actual persistence layer. Generate mock Employee models as necessary.
-     * @return One or more Employees.
-     */
+    private final List<Employee> employees = new ArrayList<>();
+
+    // GET all employees
+    @GetMapping
     public List<Employee> getAllEmployees() {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+        return employees;
     }
 
-    /**
-     * @implNote Need not be concerned with an actual persistence layer. Generate mock Employee model as necessary.
-     * @param uuid Employee UUID
-     * @return Requested Employee if exists
-     */
-    public Employee getEmployeeByUuid(UUID uuid) {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    // GET employee by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getById(@PathVariable Long id) {
+        return employees.stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * @implNote Need not be concerned with an actual persistence layer.
-     * @param requestBody hint!
-     * @return Newly created Employee
-     */
-    public Employee createEmployee(Object requestBody) {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    // POST create new employee
+    @PostMapping
+    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+        employees.add(employee);
+        return ResponseEntity.created(URI.create("/employees/" + employee.getId()))
+                .body(employee);
+    }
+
+    // PUT update existing employee
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee updated) {
+        for (int i = 0; i < employees.size(); i++) {
+            if (employees.get(i).getId().equals(id)) {
+                updated.setId(id);
+                employees.set(i, updated);
+                return ResponseEntity.ok(updated);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // DELETE employee
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        boolean removed = employees.removeIf(e -> e.getId().equals(id));
+        return removed
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

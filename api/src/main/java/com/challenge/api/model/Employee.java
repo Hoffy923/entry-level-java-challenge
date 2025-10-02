@@ -1,59 +1,42 @@
 package com.challenge.api.model;
 
-import java.time.Instant;
-import java.util.UUID;
+public class Employee {
+    private Long id;
+    private String name;
+    private String role;
 
-/**
- * Every abstraction of an Employee should, at the bare minimum, implement this interface. Consider this a binding
- * contract for the domain model of an Employee.
- */
-public interface Employee {
+    // Default constructor (needed by Spring when deserializing JSON)
+    public Employee() {}
 
-    UUID getUuid();
+    // Constructor with fields
+    public Employee(Long id, String name, String role) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+    }
 
-    /**
-     * Set by either the Service or Data layer.
-     * @param uuid required non-null
-     */
-    void setUuid(UUID uuid);
+    // Getters and setters
+    public Long getId() {
+        return id;
+    }
 
-    String getFirstName();
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    void setFirstName(String name);
+    public String getName() {
+        return name;
+    }
 
-    String getLastName();
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    void setLastName(String name);
+    public String getRole() {
+        return role;
+    }
 
-    String getFullName();
-
-    void setFullName(String name);
-
-    Integer getSalary();
-
-    void setSalary(Integer salary);
-
-    Integer getAge();
-
-    void setAge(Integer age);
-
-    String getJobTitle();
-
-    void setJobTitle(String jobTitle);
-
-    String getEmail();
-
-    void setEmail(String email);
-
-    Instant getContractHireDate();
-
-    void setContractHireDate(Instant date);
-
-    /**
-     * Nullable.
-     * @return null, if Employee has not been terminated.
-     */
-    Instant getContractTerminationDate();
-
-    void setContractTerminationDate(Instant date);
+    public void setRole(String role) {
+        this.role = role;
+    }
 }
